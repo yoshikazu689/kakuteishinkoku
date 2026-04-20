@@ -2271,56 +2271,6 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 
 updateHeader();
 </script>
-  </div> <script>
-    // ダウンロードを実行する関数
-    function downloadXto() {
-      try {
-        // 1. 各要素から数字を取得（IDはHTMLと一致させてください）
-        const income = document.getElementById('totalIncome')?.innerText.replace(/[¥,]/g, '') || "0";
-        const expense = document.getElementById('totalExpense')?.innerText.replace(/[¥,]/g, '') || "0";
-        
-        // 2. 国税庁の形式に合わせたXML構造を作成
-        // ※実際には設計書のタグ名（KOA020-K057等）を組み込んでいきます
-        const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-<DATA xmlns="http://xml.e-tax.nta.go.jp/XSD/shotoku">
-  <PROFIT_INFO>
-    <TOTAL_INCOME>${income}</TOTAL_INCOME>
-    <TOTAL_EXPENSE>${expense}</TOTAL_EXPENSE>
-    <BLUE_DEDUCTION>650000</BLUE_DEDUCTION>
-  </PROFIT_INFO>
-</DATA>`;
-
-        // 3. ブラウザに「ファイル」として認識させる処理
-        const blob = new Blob([xmlContent], { type: 'text/xml' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        
-        a.href = url;
-        a.download = 'shirokuro_2026.xto'; // 拡張子を .xto に指定
-        
-        document.body.appendChild(a);
-        a.click();
-        
-        // 4. 後片付け
-        setTimeout(() => {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 100);
-
-        alert("e-Tax用データを保存しました。");
-      } catch (e) {
-        alert("エラーが発生しました: " + e.message);
-      }
-    }
-
-    // タブ切り替えなどの既存の関数もここに書いていく必要があります
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-    }
-  </script>
 </body>
 </html>
 </body>
