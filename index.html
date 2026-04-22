@@ -522,30 +522,30 @@ select.detail-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">申告年分（例：7 ＝ 令和7年）</div>
       <input type="number" id="etax_yy" class="form-input" placeholder="7" value="7" inputmode="numeric"></div>
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">税務署コード（5桁）</div>
-      <input type="text" id="etax_zeimusho_cd" class="form-input" placeholder="例：06119（小牧）" maxlength="5"></div>
+      <input type="text" id="etax_zeimusho_cd" class="form-input" placeholder="例：01101（札幌北）" maxlength="5"></div>
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">税務署名</div>
-      <input type="text" id="etax_zeimusho_nm" class="form-input" placeholder="例：小牧"></div>
+      <input type="text" id="etax_zeimusho_nm" class="form-input" placeholder="例：札幌北"></div>
 
     <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;margin:14px 0 8px;">── 納税者情報 ──</div>
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">氏名（漢字）</div>
-      <input type="text" id="etax_nm" class="form-input" placeholder="例：菊地 良多"></div>
+      <input type="text" id="etax_nm" class="form-input" placeholder="例：白黒 太郎"></div>
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">氏名（カナ）</div>
-      <input type="text" id="etax_nm_kn" class="form-input" placeholder="例：キクチ ヨシカズ"></div>
+      <input type="text" id="etax_nm_kn" class="form-input" placeholder="例：シロクロ タロウ"></div>
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">住所</div>
-      <input type="text" id="etax_adr" class="form-input" placeholder="例：愛知県春日井市〇〇"></div>
+      <input type="text" id="etax_adr" class="form-input" placeholder="例：東京都千代田区〇〇町1-2-3"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
       <div><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">郵便番号（前3桁）</div>
-        <input type="text" id="etax_zip1" class="form-input" placeholder="486" maxlength="3" inputmode="numeric"></div>
+        <input type="text" id="etax_zip1" class="form-input" placeholder="100" maxlength="3" inputmode="numeric"></div>
       <div><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">郵便番号（後4桁）</div>
-        <input type="text" id="etax_zip2" class="form-input" placeholder="0839" maxlength="4" inputmode="numeric"></div>
+        <input type="text" id="etax_zip2" class="form-input" placeholder="0001" maxlength="4" inputmode="numeric"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
       <div><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">電話（市外）</div>
-        <input type="text" id="etax_tel1" class="form-input" placeholder="090" maxlength="4" inputmode="numeric"></div>
+        <input type="text" id="etax_tel1" class="form-input" placeholder="03" maxlength="4" inputmode="numeric"></div>
       <div><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">（市内）</div>
-        <input type="text" id="etax_tel2" class="form-input" placeholder="6804" maxlength="4" inputmode="numeric"></div>
+        <input type="text" id="etax_tel2" class="form-input" placeholder="0000" maxlength="4" inputmode="numeric"></div>
       <div><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">（番号）</div>
-        <input type="text" id="etax_tel3" class="form-input" placeholder="2640" maxlength="4" inputmode="numeric"></div>
+        <input type="text" id="etax_tel3" class="form-input" placeholder="0000" maxlength="4" inputmode="numeric"></div>
     </div>
     <div style="margin-bottom:8px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">職業</div>
       <input type="text" id="etax_shokugyo" class="form-input" placeholder="例：運送業"></div>
@@ -2228,7 +2228,7 @@ function generateBlueXML(d) {
         </KOA100-1>
         <KOA100-2 page="1">
           <AAK00000>
-            ${d.monthlyIncome.map((amt,i)=>`<AAK00${String(i+1).padStart(3,'0')}0>${amt}</AAK00${String(i+1).padStart(3,'0')}0>`).join('')}
+            ${d.monthlyIncome.map((amt,i)=>`<AAK00${String(i+1).padStart(2,'0')}0>${amt}</AAK00${String(i+1).padStart(2,'0')}0>`).join('')}
             <AAK00130>${d.income}</AAK00130>
           </AAK00000>
           <AAL00000/>
