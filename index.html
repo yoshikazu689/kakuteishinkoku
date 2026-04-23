@@ -576,9 +576,9 @@ select.detail-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:
 
     <div style="margin-top:16px;background:var(--blue-light);border-radius:8px;padding:12px;font-size:11px;color:var(--blue);line-height:1.7;">
       📌 <strong>使い方</strong><br>
-      1. ダウンロードしたXMLファイルを保存<br>
+      1. ダウンロードした <strong>.xtx</strong> ファイルを保存<br>
       2. 国税庁「確定申告書等作成コーナー」を開く<br>
-      3.「作成再開」→ダウンロードしたXMLを選択<br>
+      3.「作成再開」→ダウンロードした.xtxファイルを選択<br>
       4. 内容を確認してマイナンバーカードで送信
     </div>
   </div>
@@ -1852,7 +1852,7 @@ function downloadEtaxXML() {
         social, otherDeduct, taxable, tax, monthlyIncome, chidai,
         teisyutsu_yy, teisyutsu_mm, teisyutsu_dd });
 
-  dlFile(xml, `shinrokuro_etax_R${yy}.xml`, 'application/xml;charset=utf-8;');
+  dlFile(xml, `shinrokuro_etax_R${yy}.xtx`, 'application/xml;charset=utf-8;');
   document.getElementById('etaxModal').style.display = 'none';
   showToast('🏛️ e-Tax用XMLをダウンロードしました');
 }
