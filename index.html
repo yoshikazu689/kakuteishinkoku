@@ -2019,7 +2019,7 @@ function generateWhiteXML(d) {
         <KOA110-1 page="1">
           <AIA00000 IDREF="NENBUN"/>
           <AIB00000>
-            <AIB00010>${d.adr}</AIB00010>
+            <AIB00010>${etaxNormalize(d.adr)}</AIB00010>
             <AIB00020><AIB00030 IDREF="NOZEISHA_NM_KN"/><AIB00040 IDREF="NOZEISHA_NM"/></AIB00020>
             <AIB00050>同上</AIB00050>
             <AIB00060><AIB00070><gen:tel1>${d.tel1}</gen:tel1><gen:tel2>${d.tel2}</gen:tel2><gen:tel3>${d.tel3}</gen:tel3></AIB00070></AIB00060>
@@ -2198,7 +2198,7 @@ function generateBlueXML(d) {
         <KOA100-1 page="1">
           <AAA00000 IDREF="NENBUN"/>
           <AAB00000>
-            <AAB00010>${d.adr}</AAB00010>
+            <AAB00010>${etaxNormalize(d.adr)}</AAB00010>
             <AAB00020><AAB00030 IDREF="NOZEISHA_NM_KN"/><AAB00040 IDREF="NOZEISHA_NM"/></AAB00020>
             <AAB00050>同上</AAB00050>
             <AAB00060><AAB00070><gen:tel1>${d.tel1}</gen:tel1><gen:tel2>${d.tel2}</gen:tel2><gen:tel3>${d.tel3}</gen:tel3></AAB00070></AAB00060>
@@ -2248,7 +2248,7 @@ function generateBlueXML(d) {
           <AAP00000>
             ${d.assets && d.assets.length ? d.assets.map((a,i)=>`
               <AAP00010>
-                <AAP00020>${a.name}</AAP00020>
+                <AAP00020>${etaxNormalize(a.name)}</AAP00020>
                 <AAP00030>${a.cost}</AAP00030>
                 <AAP00070>${a.life}</AAP00070>
                 <AAP00140>${a.annual}</AAP00140>
