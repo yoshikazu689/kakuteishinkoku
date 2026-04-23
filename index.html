@@ -1788,19 +1788,32 @@ function downloadEtaxXML() {
   const yr = new Date().getFullYear();
   const reki = yr - 2018; // 令和換算
 
-  // フォームから個人情報取得
+  // e-Tax用文字正規化（不正文字を自動変換）
+  function etaxNormalize(str) {
+    if (!str) return '';
+    return str
+      // 数学マイナス・各種ダッシュ類 → 半角ハイフン
+      .replace(/[\u2212\u2014\u2013\u2015\u30FC\uFF0D]/g, '-')
+      // 全角スペース → 半角スペース
+      .replace(/\u3000/g, ' ')
+      // 全角英数字 → 半角英数字
+      .replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .trim();
+  }
+
+  // フォームから個人情報取得（正規化済み）
   const yy = document.getElementById('etax_yy').value || String(reki);
   const zeimusho_cd = document.getElementById('etax_zeimusho_cd').value || '';
-  const zeimusho_nm = document.getElementById('etax_zeimusho_nm').value || '';
-  const nm = document.getElementById('etax_nm').value || '';
-  const nm_kn = document.getElementById('etax_nm_kn').value || '';
-  const adr = document.getElementById('etax_adr').value || '';
+  const zeimusho_nm = etaxNormalize(document.getElementById('etax_zeimusho_nm').value);
+  const nm = etaxNormalize(document.getElementById('etax_nm').value);
+  const nm_kn = etaxNormalize(document.getElementById('etax_nm_kn').value);
+  const adr = etaxNormalize(document.getElementById('etax_adr').value);
   const zip1 = document.getElementById('etax_zip1').value || '';
   const zip2 = document.getElementById('etax_zip2').value || '';
   const tel1 = document.getElementById('etax_tel1').value || '';
   const tel2 = document.getElementById('etax_tel2').value || '';
   const tel3 = document.getElementById('etax_tel3').value || '';
-  const shokugyo = document.getElementById('etax_shokugyo').value || '';
+  const shokugyo = etaxNormalize(document.getElementById('etax_shokugyo').value);
   const birth_era = document.getElementById('etax_birth_era').value || '3';
   const birth_yy = document.getElementById('etax_birth_yy').value || '';
   const birth_mmdd = document.getElementById('etax_birth_mmdd').value || '1/1';
