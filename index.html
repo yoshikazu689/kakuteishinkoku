@@ -508,82 +508,6 @@ select.detail-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:
   <button class="download-btn" style="background:#c84b2f;border:2px solid #ff6b4a;" onclick="openEtaxModal()">🏛️ e-Tax用XMLファイルを出力</button>
 </div>
 
-<!-- e-Tax個人情報入力モーダル -->
-<div id="etaxModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:998;overflow-y:auto;-webkit-overflow-scrolling:touch;">
-  <div style="background:white;border-radius:20px 20px 0 0;padding:20px 16px 48px;width:100%;max-width:480px;margin:40px auto 0;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-      <div style="font-size:15px;font-weight:700;color:var(--accent);">🏛️ e-Tax用XTXファイル出力</div>
-      <button onclick="document.getElementById('etaxModal').style.display='none'" style="background:var(--cream);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
-    </div>
-    <div style="background:#fff7ed;border-radius:8px;padding:8px 12px;font-size:11px;color:#9a3412;margin-bottom:12px;line-height:1.5;">
-      ⚠️ 入力内容は次回も自動で復元されます。マイナンバーは任意です。
-    </div>
-
-    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">── 基本情報 ──</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">申告年分（令和）</div>
-        <input type="number" id="etax_yy" class="form-input" placeholder="8" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">税務署コード（5桁）</div>
-        <input type="text" id="etax_zeimusho_cd" class="form-input" placeholder="06119" maxlength="5" style="padding:7px 9px;font-size:13px;"></div>
-    </div>
-    <div style="margin-bottom:6px;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">税務署名</div>
-      <input type="text" id="etax_zeimusho_nm" class="form-input" placeholder="例：小牧" style="padding:7px 9px;font-size:13px;"></div>
-
-    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;margin:10px 0 6px;">── 納税者情報 ──</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">氏名（漢字）</div>
-        <input type="text" id="etax_nm" class="form-input" placeholder="白黒 太郎" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">氏名（カナ）</div>
-        <input type="text" id="etax_nm_kn" class="form-input" placeholder="シロクロ タロウ" style="padding:7px 9px;font-size:13px;"></div>
-    </div>
-    <div style="margin-bottom:6px;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">住所</div>
-      <input type="text" id="etax_adr" class="form-input" placeholder="東京都千代田区〇〇1-2-3" style="padding:7px 9px;font-size:13px;"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">郵便番号（前3桁）</div>
-        <input type="text" id="etax_zip1" class="form-input" placeholder="100" maxlength="3" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">郵便番号（後4桁）</div>
-        <input type="text" id="etax_zip2" class="form-input" placeholder="0001" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">電話（市外）</div>
-        <input type="text" id="etax_tel1" class="form-input" placeholder="090" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">（市内）</div>
-        <input type="text" id="etax_tel2" class="form-input" placeholder="0000" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">（番号）</div>
-        <input type="text" id="etax_tel3" class="form-input" placeholder="0000" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">職業</div>
-        <input type="text" id="etax_shokugyo" class="form-input" placeholder="運送業" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">生年（元号/年）</div>
-        <div style="display:flex;gap:3px;">
-          <select class="form-input" id="etax_birth_era" style="padding:7px 4px;font-size:11px;flex:1;">
-            <option value="3">昭和</option><option value="4">平成</option><option value="5">令和</option>
-          </select>
-          <input type="number" id="etax_birth_yy" class="form-input" placeholder="61" inputmode="numeric" style="padding:7px 5px;font-size:13px;flex:1;">
-        </div></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">月/日</div>
-        <input type="text" id="etax_birth_mmdd" class="form-input" placeholder="1/3" style="padding:7px 9px;font-size:13px;"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">利用者識別番号（任意）</div>
-        <input type="text" id="etax_nozeisha_id" class="form-input" placeholder="16桁" maxlength="16" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">マイナンバー（任意）</div>
-        <input type="text" id="etax_kojinbango" class="form-input" placeholder="12桁" maxlength="12" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
-    </div>
-    <div style="margin-bottom:12px;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">申告種別</div>
-      <select class="form-input" id="etax_shinkoku_type" style="padding:7px 9px;font-size:13px;">
-        <option value="blue">青色申告（KOA100）</option>
-        <option value="white">白色申告（KOA110）</option>
-      </select></div>
-
-    <button onclick="downloadEtaxXML()" style="width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;margin-bottom:8px;">🏛️ XTXファイルをダウンロード</button>
-
-    <div style="background:var(--blue-light);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--blue);line-height:1.7;">
-      📌 <strong>使い方：</strong>「作成済みデータの利用」→「作成済み手続きの選択」→ファイルを選択 → マイナンバーカードで送信
-    </div>
-  </div>
-</div>
 
 <!-- B/S -->
 <div class="content" id="tab-bs">
@@ -2309,5 +2233,82 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 
 updateHeader();
 </script>
+
+<!-- e-Tax個人情報入力モーダル -->
+<div id="etaxModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:998;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="background:white;border-radius:20px 20px 0 0;padding:20px 16px 48px;width:100%;max-width:480px;margin:40px auto 0;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-size:15px;font-weight:700;color:var(--accent);">🏛️ e-Tax用XTXファイル出力</div>
+      <button onclick="document.getElementById('etaxModal').style.display='none'" style="background:var(--cream);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+    <div style="background:#fff7ed;border-radius:8px;padding:8px 12px;font-size:11px;color:#9a3412;margin-bottom:12px;line-height:1.5;">
+      ⚠️ 入力内容は次回も自動で復元されます。マイナンバーは任意です。
+    </div>
+
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">── 基本情報 ──</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">申告年分（令和）</div>
+        <input type="number" id="etax_yy" class="form-input" placeholder="8" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">税務署コード（5桁）</div>
+        <input type="text" id="etax_zeimusho_cd" class="form-input" placeholder="06119" maxlength="5" style="padding:7px 9px;font-size:13px;"></div>
+    </div>
+    <div style="margin-bottom:6px;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">税務署名</div>
+      <input type="text" id="etax_zeimusho_nm" class="form-input" placeholder="例：小牧" style="padding:7px 9px;font-size:13px;"></div>
+
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;margin:10px 0 6px;">── 納税者情報 ──</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">氏名（漢字）</div>
+        <input type="text" id="etax_nm" class="form-input" placeholder="白黒 太郎" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">氏名（カナ）</div>
+        <input type="text" id="etax_nm_kn" class="form-input" placeholder="シロクロ タロウ" style="padding:7px 9px;font-size:13px;"></div>
+    </div>
+    <div style="margin-bottom:6px;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">住所</div>
+      <input type="text" id="etax_adr" class="form-input" placeholder="東京都千代田区〇〇1-2-3" style="padding:7px 9px;font-size:13px;"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">郵便番号（前3桁）</div>
+        <input type="text" id="etax_zip1" class="form-input" placeholder="100" maxlength="3" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">郵便番号（後4桁）</div>
+        <input type="text" id="etax_zip2" class="form-input" placeholder="0001" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">電話（市外）</div>
+        <input type="text" id="etax_tel1" class="form-input" placeholder="090" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">（市内）</div>
+        <input type="text" id="etax_tel2" class="form-input" placeholder="0000" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">（番号）</div>
+        <input type="text" id="etax_tel3" class="form-input" placeholder="0000" maxlength="4" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">職業</div>
+        <input type="text" id="etax_shokugyo" class="form-input" placeholder="運送業" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">生年（元号/年）</div>
+        <div style="display:flex;gap:3px;">
+          <select class="form-input" id="etax_birth_era" style="padding:7px 4px;font-size:11px;flex:1;">
+            <option value="3">昭和</option><option value="4">平成</option><option value="5">令和</option>
+          </select>
+          <input type="number" id="etax_birth_yy" class="form-input" placeholder="61" inputmode="numeric" style="padding:7px 5px;font-size:13px;flex:1;">
+        </div></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">月/日</div>
+        <input type="text" id="etax_birth_mmdd" class="form-input" placeholder="1/3" style="padding:7px 9px;font-size:13px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">利用者識別番号（任意）</div>
+        <input type="text" id="etax_nozeisha_id" class="form-input" placeholder="16桁" maxlength="16" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">マイナンバー（任意）</div>
+        <input type="text" id="etax_kojinbango" class="form-input" placeholder="12桁" maxlength="12" inputmode="numeric" style="padding:7px 9px;font-size:13px;"></div>
+    </div>
+    <div style="margin-bottom:12px;"><div style="font-size:10px;color:var(--muted);margin-bottom:2px;">申告種別</div>
+      <select class="form-input" id="etax_shinkoku_type" style="padding:7px 9px;font-size:13px;">
+        <option value="blue">青色申告（KOA100）</option>
+        <option value="white">白色申告（KOA110）</option>
+      </select></div>
+
+    <button onclick="downloadEtaxXML()" style="width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;margin-bottom:8px;">🏛️ XTXファイルをダウンロード</button>
+
+    <div style="background:var(--blue-light);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--blue);line-height:1.7;">
+      📌 <strong>使い方：</strong>「作成済みデータの利用」→「作成済み手続きの選択」→ファイルを選択 → マイナンバーカードで送信
+    </div>
+  </div>
+</div>
 </body>
 </html>
