@@ -1812,29 +1812,61 @@ function etaxNormalize(str) {
 }
 
 function etaxIT(d) {
-  // 共通の納税者情報ブロック
   return `<IT VR="1.3" id="IT">
-    <ZEIMUSHO ID="ZEIMUSHO"><gen:zeimusho_CD>${d.zeimusho_cd}</gen:zeimusho_CD><gen:zeimusho_NM>${d.zeimusho_nm}</gen:zeimusho_NM></ZEIMUSHO>
-    <TEISYUTSU_DAY ID="TEISYUTSU_DAY"><gen:era>5</gen:era><gen:yy>${d.teisyutsu_yy}</gen:yy><gen:mm>${d.teisyutsu_mm}</gen:mm><gen:dd>${d.teisyutsu_dd}</gen:dd></TEISYUTSU_DAY>
+    <ZEIMUSHO ID="ZEIMUSHO">
+      <gen:zeimusho_CD>${d.zeimusho_cd}</gen:zeimusho_CD>
+      <gen:zeimusho_NM>${d.zeimusho_nm}</gen:zeimusho_NM>
+    </ZEIMUSHO>
+    <TEISYUTSU_DAY ID="TEISYUTSU_DAY">
+      <gen:era>5</gen:era>
+      <gen:yy>${d.teisyutsu_yy}</gen:yy>
+      <gen:mm>${d.teisyutsu_mm}</gen:mm>
+      <gen:dd>${d.teisyutsu_dd}</gen:dd>
+    </TEISYUTSU_DAY>
     <NOZEISHA_ID ID="NOZEISHA_ID">${d.nozeisha_id}</NOZEISHA_ID>
-    <NOZEISHA_BANGO ID="NOZEISHA_BANGO"><gen:kojinbango>${d.kojinbango}</gen:kojinbango></NOZEISHA_BANGO>
+    <NOZEISHA_BANGO ID="NOZEISHA_BANGO">
+      <gen:kojinbango>${d.kojinbango}</gen:kojinbango>
+    </NOZEISHA_BANGO>
     <NOZEISHA_NM_KN ID="NOZEISHA_NM_KN">${d.nm_kn}</NOZEISHA_NM_KN>
     <NOZEISHA_NM ID="NOZEISHA_NM">${d.nm}</NOZEISHA_NM>
-    <NOZEISHA_ZIP ID="NOZEISHA_ZIP"><gen:zip1>${d.zip1}</gen:zip1><gen:zip2>${d.zip2}</gen:zip2></NOZEISHA_ZIP>
-    <NOZEISHA_ADR ID="NOZEISHA_ADR">${d.adr}</NOZEISHA_ADR>
+    <NOZEISHA_ZIP ID="NOZEISHA_ZIP">
+      <gen:zip1>${d.zip1}</gen:zip1>
+      <gen:zip2>${d.zip2}</gen:zip2>
+    </NOZEISHA_ZIP>
+    <NOZEISHA_ADR ID="NOZEISHA_ADR">${etaxNormalize(d.adr)}</NOZEISHA_ADR>
     <NOZEISHA_ADR_CODE ID="NOZEISHA_ADR_CODE"/>
     <ICHIGATSUIPPI_ADR ID="ICHIGATSUIPPI_ADR">同上</ICHIGATSUIPPI_ADR>
     <ICHIGATSUIPPI_ADR_CODE ID="ICHIGATSUIPPI_ADR_CODE"/>
     <NOZEISHA_YAGO ID="NOZEISHA_YAGO"/>
-    <NOZEISHA_TEL ID="NOZEISHA_TEL"><gen:tel1>${d.tel1}</gen:tel1><gen:tel2>${d.tel2}</gen:tel2><gen:tel3>${d.tel3}</gen:tel3></NOZEISHA_TEL>
-    <SEIBETSU ID="SEIBETSU"><kubun_CD>1</kubun_CD><kubun_NM>男</kubun_NM></SEIBETSU>
-    <BIRTHDAY ID="BIRTHDAY"><gen:era>${d.birth_era}</gen:era><gen:yy>${d.birth_yy}</gen:yy><gen:mm>${d.birth_mm||1}</gen:mm><gen:dd>${d.birth_dd||1}</gen:dd></BIRTHDAY>
+    <NOZEISHA_TEL ID="NOZEISHA_TEL">
+      <gen:tel1>${d.tel1}</gen:tel1>
+      <gen:tel2>${d.tel2}</gen:tel2>
+      <gen:tel3>${d.tel3}</gen:tel3>
+    </NOZEISHA_TEL>
+    <SEIBETSU ID="SEIBETSU">
+      <kubun_CD>1</kubun_CD>
+      <kubun_NM>男</kubun_NM>
+    </SEIBETSU>
+    <BIRTHDAY ID="BIRTHDAY">
+      <gen:era>${d.birth_era}</gen:era>
+      <gen:yy>${d.birth_yy}</gen:yy>
+      <gen:mm>${d.birth_mm || 1}</gen:mm>
+      <gen:dd>${d.birth_dd || 1}</gen:dd>
+    </BIRTHDAY>
     <SETAINUSHI_NM ID="SETAINUSHI_NM">${d.nm}</SETAINUSHI_NM>
     <SETAINUSHI_ZOKU ID="SETAINUSHI_ZOKU">本人</SETAINUSHI_ZOKU>
-    <SHOKUGYO ID="SHOKUGYO">${d.shokugyo}</SHOKUGYO>
-    <TETSUZUKI ID="TETSUZUKI"><procedure_CD>RKO0010</procedure_CD><procedure_NM>所得税及び復興特別所得税申告</procedure_NM></TETSUZUKI>
-    <NENBUN ID="NENBUN"><gen:era>5</gen:era><gen:yy>${d.yy}</gen:yy></NENBUN>
-    <SHINKOKU_KBN ID="SHINKOKU_KBN"><kubun_CD>1</kubun_CD></SHINKOKU_KBN>
+    <SHOKUGYO ID="SHOKUGYO">${etaxNormalize(d.shokugyo)}</SHOKUGYO>
+    <TETSUZUKI ID="TETSUZUKI">
+      <procedure_CD>RKO0010</procedure_CD>
+      <procedure_NM>所得税及び復興特別所得税申告</procedure_NM>
+    </TETSUZUKI>
+    <NENBUN ID="NENBUN">
+      <gen:era>5</gen:era>
+      <gen:yy>${d.yy}</gen:yy>
+    </NENBUN>
+    <SHINKOKU_KBN ID="SHINKOKU_KBN">
+      <kubun_CD>1</kubun_CD>
+    </SHINKOKU_KBN>
   </IT>`;
 }
 
