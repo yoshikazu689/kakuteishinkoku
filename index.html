@@ -1981,9 +1981,9 @@ function generateWhiteXML(d) {
               <ABL00440>${d.profit}</ABL00440>
               <ABL00450>${d.social + d.otherDeduct + 480000}</ABL00450>
               <ABL00460/>
-              <ABL00540>${d.taxable > 0 ? d.taxable : ''}</ABL00540>
+              <ABL00540${d.taxable > 0 ? `>${d.taxable}</ABL00540` : '/'}/>
             </ABL00430>
-            <ABL00900><ABL00910>${d.tax > 0 ? d.tax : ''}</ABL00910><ABL00934/><ABL00940/></ABL00900>
+            <ABL00900><ABL00910${d.tax > 0 ? `>${d.tax}</ABL00910` : '/'}><ABL00934/><ABL00940/></ABL00900>
             <ABL00640/><ABL00870><ABL01050/></ABL00870>
           </ABL00000>
         </KOA020-3>
@@ -2160,9 +2160,9 @@ function generateBlueXML(d) {
               <ABL00440>${d.profit}</ABL00440>
               <ABL00450>${d.blueDeduct + d.social + d.otherDeduct + 480000}</ABL00450>
               <ABL00460>${d.blueDeduct}</ABL00460>
-              <ABL00540>${d.taxable > 0 ? d.taxable : ''}</ABL00540>
+              <ABL00540${d.taxable > 0 ? `>${d.taxable}</ABL00540` : '/'}/>
             </ABL00430>
-            <ABL00900><ABL00910>${d.tax > 0 ? d.tax : ''}</ABL00910><ABL00934/><ABL00940/></ABL00900>
+            <ABL00900><ABL00910${d.tax > 0 ? `>${d.tax}</ABL00910` : '/'}>${d.tax > 0 ? '' : ''}<ABL00934/><ABL00940/></ABL00900>
             <ABL00640/><ABL00870><ABL01050/></ABL00870>
           </ABL00000>
         </KOA020-3>
