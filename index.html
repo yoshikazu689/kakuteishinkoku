@@ -2052,196 +2052,732 @@ function generateWhiteXML(d) {
 function generateBlueXML(d) {
   const expTotal = d.expense + d.deprTotal;
   const grossProfit = d.income - (d.cats['仕入高']||0);
+  const today = new Date().toISOString().slice(0,10);
+  const sp = (n) => ' '.repeat(n); // インデントヘルパー
+
+  const monthTags = d.monthlyIncome.map((amt,i) => {
+    const tag = `AAK00${String(i+1).padStart(2,'0')}0`;
+    return `${sp(24)}<${tag}>${amt}</${tag}>`;
+  }).join('\n');
+
+  const assetTags = (d.assets && d.assets.length) ? d.assets.map(a => `
+${sp(24)}<AAP00010>
+${sp(28)}<AAP00020>${etaxNormalize(a.name)}</AAP00020>
+${sp(28)}<AAP00030>${a.cost}</AAP00030>
+${sp(28)}<AAP00070>${a.life}</AAP00070>
+${sp(28)}<AAP00140>${a.annual}</AAP00140>
+${sp(28)}<AAP00160>${a.annual}</AAP00160>
+${sp(24)}</AAP00010>`).join('') : '';
+
   return `<?xml version="1.0" encoding="UTF-8"?><DATA xmlns="http://xml.e-tax.nta.go.jp/XSD/shotoku" xmlns:gen="http://xml.e-tax.nta.go.jp/XSD/general" id="DATA">
-  <RKO0010 VR="25.0.0" id="RKO0010">
-    <CATALOG id="CATALOG">
-      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-        <rdf:description id="REPORT">
-          <SEND_DATA/>
-          <IT_SEC><rdf:description about="#IT"/></IT_SEC>
-          <FORM_SEC>
-            <rdf:Seq>
-              <rdf:li><rdf:description about="#KOA020-1"/></rdf:li>
-              <rdf:li><rdf:description about="#KOA100-1"/></rdf:li>
-            </rdf:Seq>
-          </FORM_SEC>
-        </rdf:description>
-      </rdf:RDF>
-    </CATALOG>
-    <CONTENTS id="CONTENTS">
-      ${etaxIT(d)}
-      <KOA020 VR="23.0" id="KOA020-1" page="1" sakuseiDay="${new Date().toISOString().slice(0,10)}" sakuseiNM="${d.nm}" softNM="シロクロ帳">
-        <KOA020-1 page="1">
-          <ABA00000>
-            <ABA00010 IDREF="NENBUN"/><ABA00020 IDREF="SHINKOKU_KBN"/>
-            <ABA00030 IDREF="ZEIMUSHO"/><ABA00040 IDREF="TEISYUTSU_DAY"/>
-            <ABA00050>
-              <ABA00060><ABA00080 IDREF="NOZEISHA_ZIP"/><ABA00090 IDREF="NOZEISHA_ADR"/></ABA00060>
-              <ABA00100><ABA00110><gen:era>5</gen:era><gen:yy>${d.teisyutsu_yy}</gen:yy></ABA00110><ABA00120 IDREF="ICHIGATSUIPPI_ADR"/></ABA00100>
-              <ABA00125 IDREF="NOZEISHA_BANGO"/>
-              <ABA00130 IDREF="NOZEISHA_NM_KN"/><ABA00140 IDREF="NOZEISHA_NM"/>
-              <ABA00160 IDREF="SHOKUGYO"/><ABA00170 IDREF="NOZEISHA_YAGO"/>
-              <ABA00180 IDREF="SETAINUSHI_NM"/><ABA00190 IDREF="SETAINUSHI_ZOKU"/>
-              <ABA00200 IDREF="BIRTHDAY"/><ABA00220 IDREF="NOZEISHA_TEL"/>
-              <ABA00225><kubun_CD>2</kubun_CD></ABA00225>
-              <ABA00230>
-                <ABA00240><kubun_CD>2</kubun_CD></ABA00240>
-                <ABA00250><kubun_CD>2</kubun_CD></ABA00250>
-                <ABA00252><kubun_CD>2</kubun_CD></ABA00252>
-                <ABA00253><kubun_CD>2</kubun_CD></ABA00253>
-                <ABA00256><kubun_CD>2</kubun_CD></ABA00256>
-              </ABA00230>
-              <ABA00260><kubun_CD>2</kubun_CD></ABA00260>
-            </ABA00050>
-          </ABA00000>
-          <ABB00000>
-            <ABB00010>
-              <ABB00020><ABB00025>2</ABB00025><ABB00030>${d.income}</ABB00030></ABB00020>
-              <ABB00046>2</ABB00046><ABB00090/><ABB00120/>
-            </ABB00010>
-            <ABB00270>
-              <ABB00280><ABB00300>${d.profit}</ABB00300></ABB00280>
-              <ABB01050><ABB01070/><ABB01100/></ABB01050>
-              <ABB00410>${d.profit}</ABB00410>
-            </ABB00270>
-            <ABB00420>
-              <ABB00542>${d.blueDeduct}</ABB00542>
-              <ABB00550>${d.social + d.otherDeduct + 480000}</ABB00550>
-              <ABB00555>${d.social + d.otherDeduct + 480000}</ABB00555>
-              <ABB00560>${d.social + d.otherDeduct + 480000}</ABB00560>
-            </ABB00420>
-            <ABB00570><ABB00610/><ABB00740/></ABB00570>
-            <ABB00763/><ABB00770><ABB00850/></ABB00770><ABB00880/>
-          </ABB00000>
-          <ABZ00000><kubun_CD>2</kubun_CD></ABZ00000>
-          <ABZ40000><kubun_CD>2</kubun_CD></ABZ40000>
-        </KOA020-1>
-        <KOA020-2 page="1">
-          <ABC00000>
-            <ABC00010 IDREF="NENBUN"/><ABC00015 IDREF="SHINKOKU_KBN"/>
-            <ABC00020>
-              <ABC00040 IDREF="NOZEISHA_ADR"/><ABC00050 IDREF="NOZEISHA_YAGO"/>
-              <ABC00060 IDREF="NOZEISHA_NM_KN"/><ABC00070 IDREF="NOZEISHA_NM"/>
-            </ABC00020>
-          </ABC00000>
-          <ABD00000/><ABE00000/>
-          <ABH00000>
-            <ABH00110/><ABH00210/><ABH00240/><ABH00270/>
-            <ABH00320>
-              <ABH00365><kubun_CD>2</kubun_CD></ABH00365>
-              <ABH00370>
-                <ABH00380><kubun_CD>2</kubun_CD></ABH00380>
-                <ABH00600><kubun_CD>2</kubun_CD></ABH00600>
-              </ABH00370>
-              <ABH00610><kubun_CD>2</kubun_CD></ABH00610>
-              <ABH00620><kubun_CD>2</kubun_CD></ABH00620>
-            </ABH00320>
-          </ABH00000>
-          <ABY00000/>
-          <ABI00000>
-            <ABI00045><kubun_CD>2</kubun_CD></ABI00045>
-            <ABI00080><ABI00230/><ABI00260/></ABI00080>
-            <ABI00110/>
-          </ABI00000>
-        </KOA020-2>
-        <KOA020-3 page="1">
-          <ABK00000>
-            <ABK00010 IDREF="NENBUN"/><ABK00020 IDREF="SHINKOKU_KBN"/>
-            <ABK00030>
-              <ABK00040><ABK00060 IDREF="NOZEISHA_ADR"/></ABK00040>
-              <ABK00066 IDREF="NOZEISHA_YAGO"/>
-              <ABK00070 IDREF="NOZEISHA_NM_KN"/><ABK00080 IDREF="NOZEISHA_NM"/>
-            </ABK00030>
-          </ABK00000>
-          <ABL00000>
-            <ABL00010><ABL00020><ABL00030/><ABL00060/><ABL00100/><ABL00134/><ABL00140/></ABL00020></ABL00010>
-            <ABL00190><ABL00200><ABL00210/><ABL00240/><ABL00280/><ABL00320/><ABL00330/></ABL00200></ABL00190>
-            <ABL00430>
-              <ABL00440>${d.profit}</ABL00440>
-              <ABL00450>${d.blueDeduct + d.social + d.otherDeduct + 480000}</ABL00450>
-              <ABL00460>${d.blueDeduct}</ABL00460>
-              ${d.taxable > 0 ? `<ABL00540>${d.taxable}</ABL00540>` : '<ABL00540/>'}
-            </ABL00430>
-            <ABL00900>${d.tax > 0 ? `<ABL00910>${d.tax}</ABL00910>` : '<ABL00910/>'}<ABL00934/><ABL00940/></ABL00900>
-            <ABL00640/><ABL00870><ABL01050/></ABL00870>
-          </ABL00000>
-        </KOA020-3>
-      </KOA020>
-      <KOA100 VR="23.0" id="KOA100-1" page="1" sakuseiDay="${new Date().toISOString().slice(0,10)}" sakuseiNM="${d.nm}" softNM="シロクロ帳">
-        <KOA100-1 page="1">
-          <AAA00000 IDREF="NENBUN"/>
-          <AAB00000>
-            <AAB00010>${etaxNormalize(d.adr)}</AAB00010>
-            <AAB00020><AAB00030 IDREF="NOZEISHA_NM_KN"/><AAB00040 IDREF="NOZEISHA_NM"/></AAB00020>
-            <AAB00050>同上</AAB00050>
-            <AAB00060><AAB00070><gen:tel1>${d.tel1}</gen:tel1><gen:tel2>${d.tel2}</gen:tel2><gen:tel3>${d.tel3}</gen:tel3></AAB00070></AAB00060>
-            <AAB00090 IDREF="SHOKUGYO"/>
-          </AAB00000>
-          <AAE00000 IDREF="TEISYUTSU_DAY"/>
-          <AAR00000><kubun_CD>1</kubun_CD></AAR00000>
-          <AAF00000>
-            <AAF00010><gen:mm>1</gen:mm><gen:dd>1</gen:dd></AAF00010>
-            <AAF00020><gen:mm>12</gen:mm><gen:dd>31</gen:dd></AAF00020>
-          </AAF00000>
-          <AAG00000>
-            <AAG00010>${d.income}</AAG00010>
-            <AAG00020>${d.cats['仕入高']||0}</AAG00020>
-            <AAG00040>${d.cats['仕入高']||0}</AAG00040>
-            <AAG00050>${grossProfit}</AAG00050>
-            <AAG00060>${d.cats['租税公課']||0}</AAG00060>
-            <AAG00070>${d.cats['荷造運賃']||0}</AAG00070>
-            <AAG00080>0</AAG00080>
-            <AAG00090>${d.cats['旅費交通費']||0}</AAG00090>
-            <AAG00100>${d.cats['通信費']||0}</AAG00100>
-            <AAG00110>0</AAG00110>
-            <AAG00120>${d.cats['接待交際費']||0}</AAG00120>
-            <AAG00130>${d.cats['保険料']||0}</AAG00130>
-            <AAG00140>${d.cats['車両費']||0}</AAG00140>
-            <AAG00150>${d.cats['消耗品費']||0}</AAG00150>
-            <AAG00160>${d.deprTotal}</AAG00160>
-            <AAG00170>${d.cats['外注工賃']||0}</AAG00170>
-            <AAG00180>0</AAG00180>
-            <AAG00190>${d.cats['地代家賃']||0}</AAG00190>
-            <AAG00200>0</AAG00200>
-            <AAG00215>${d.cats['燃料費']||0}</AAG00215>
-            <AAG00230>${d.cats['雑費']||0}</AAG00230>
-            <AAG00240>${expTotal}</AAG00240>
-            <AAG00250>${d.profit}</AAG00250>
-            <AAG00260>0</AAG00260>
-            <AAG00270>${d.profit}</AAG00270>
-          </AAG00000>
-          <AAH00000/>
-        </KOA100-1>
-        <KOA100-2 page="1">
-          <AAK00000>
-            ${d.monthlyIncome.map((amt,i)=>`<AAK00${String(i+1).padStart(2,'0')}0>${amt}</AAK00${String(i+1).padStart(2,'0')}0>`).join('')}
-            <AAK00130>${d.income}</AAK00130>
-          </AAK00000>
-          <AAL00000/>
-          <AAP00000>
-            ${d.assets && d.assets.length ? d.assets.map((a,i)=>`
-              <AAP00010>
-                <AAP00020>${etaxNormalize(a.name)}</AAP00020>
-                <AAP00030>${a.cost}</AAP00030>
-                <AAP00070>${a.life}</AAP00070>
-                <AAP00140>${a.annual}</AAP00140>
-                <AAP00160>${a.annual}</AAP00160>
-              </AAP00010>`).join('') : ''}
-            <AAP00170>${d.deprTotal}</AAP00170>
-          </AAP00000>
-        </KOA100-2>
-        <KOA100-3 page="1">
-          <AAS00000/>
-          <AAT00000>
-            ${(d.cats['地代家賃']||0)>0?`<AAT00010><AAT00030></AAT00030><AAT00060>${d.cats['地代家賃']}</AAT00060><AAT00080>${d.cats['地代家賃']}</AAT00080></AAT00010>`:''}
-          </AAT00000>
-        </KOA100-3>
-      </KOA100>
-    </CONTENTS>
-  </RKO0010>
+${sp(8)}
+${sp(4)}<RKO0010 VR="25.0.0" id="RKO0010">
+${sp(12)}
+${sp(8)}<CATALOG id="CATALOG">
+${sp(16)}
+${sp(12)}<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+${sp(20)}
+${sp(16)}<rdf:description id="REPORT">
+${sp(24)}
+${sp(20)}<SEND_DATA/>
+${sp(24)}
+${sp(20)}<IT_SEC>
+${sp(28)}
+${sp(24)}<rdf:description about="#IT"/>
+${sp(24)}
+${sp(20)}</IT_SEC>
+${sp(24)}
+${sp(20)}<FORM_SEC>
+${sp(28)}
+${sp(24)}<rdf:Seq>
+${sp(32)}
+${sp(28)}<rdf:li>
+${sp(36)}
+${sp(32)}<rdf:description about="#KOA020-1"/>
+${sp(32)}
+${sp(28)}</rdf:li>
+${sp(32)}
+${sp(28)}<rdf:li>
+${sp(36)}
+${sp(32)}<rdf:description about="#KOA100-1"/>
+${sp(32)}
+${sp(28)}</rdf:li>
+${sp(28)}
+${sp(24)}</rdf:Seq>
+${sp(24)}
+${sp(20)}</FORM_SEC>
+${sp(20)}
+${sp(16)}</rdf:description>
+${sp(16)}
+${sp(12)}</rdf:RDF>
+${sp(12)}
+${sp(8)}</CATALOG>
+${sp(12)}
+${sp(8)}<CONTENTS id="CONTENTS">
+${sp(16)}
+${sp(12)}<IT VR="1.3" id="IT">
+${sp(24)}
+${sp(16)}<ZEIMUSHO ID="ZEIMUSHO">
+${sp(32)}
+${sp(24)}<gen:zeimusho_CD>${d.zeimusho_cd}</gen:zeimusho_CD>
+${sp(32)}
+${sp(24)}<gen:zeimusho_NM>${etaxNormalize(d.zeimusho_nm)}</gen:zeimusho_NM>
+${sp(24)}
+${sp(16)}</ZEIMUSHO>
+${sp(24)}
+${sp(16)}<TEISYUTSU_DAY ID="TEISYUTSU_DAY">
+${sp(32)}
+${sp(24)}<gen:era>5</gen:era>
+${sp(32)}
+${sp(24)}<gen:yy>${d.teisyutsu_yy}</gen:yy>
+${sp(32)}
+${sp(24)}<gen:mm>${d.teisyutsu_mm}</gen:mm>
+${sp(32)}
+${sp(24)}<gen:dd>${d.teisyutsu_dd}</gen:dd>
+${sp(24)}
+${sp(16)}</TEISYUTSU_DAY>
+${sp(24)}
+${sp(16)}<NOZEISHA_ID ID="NOZEISHA_ID">${d.nozeisha_id}</NOZEISHA_ID>
+${sp(24)}
+${sp(16)}<NOZEISHA_BANGO ID="NOZEISHA_BANGO">
+${sp(32)}
+${sp(24)}<gen:kojinbango>${d.kojinbango}</gen:kojinbango>
+${sp(24)}
+${sp(16)}</NOZEISHA_BANGO>
+${sp(24)}
+${sp(16)}<NOZEISHA_NM_KN ID="NOZEISHA_NM_KN">${d.nm_kn}</NOZEISHA_NM_KN>
+${sp(24)}
+${sp(16)}<NOZEISHA_NM ID="NOZEISHA_NM">${d.nm}</NOZEISHA_NM>
+${sp(24)}
+${sp(16)}<NOZEISHA_ZIP ID="NOZEISHA_ZIP">
+${sp(32)}
+${sp(24)}<gen:zip1>${d.zip1}</gen:zip1>
+${sp(32)}
+${sp(24)}<gen:zip2>${d.zip2}</gen:zip2>
+${sp(24)}
+${sp(16)}</NOZEISHA_ZIP>
+${sp(24)}
+${sp(16)}<NOZEISHA_ADR ID="NOZEISHA_ADR">${etaxNormalize(d.adr)}</NOZEISHA_ADR>
+${sp(24)}
+${sp(16)}<NOZEISHA_ADR_CODE ID="NOZEISHA_ADR_CODE"/>
+${sp(24)}
+${sp(16)}<ICHIGATSUIPPI_ADR ID="ICHIGATSUIPPI_ADR">同上</ICHIGATSUIPPI_ADR>
+${sp(24)}
+${sp(16)}<ICHIGATSUIPPI_ADR_CODE ID="ICHIGATSUIPPI_ADR_CODE"/>
+${sp(24)}
+${sp(16)}<NOZEISHA_YAGO ID="NOZEISHA_YAGO"/>
+${sp(24)}
+${sp(16)}<NOZEISHA_TEL ID="NOZEISHA_TEL">
+${sp(32)}
+${sp(24)}<gen:tel1>${d.tel1}</gen:tel1>
+${sp(32)}
+${sp(24)}<gen:tel2>${d.tel2}</gen:tel2>
+${sp(32)}
+${sp(24)}<gen:tel3>${d.tel3}</gen:tel3>
+${sp(24)}
+${sp(16)}</NOZEISHA_TEL>
+${sp(24)}
+${sp(16)}<SEIBETSU ID="SEIBETSU">
+${sp(32)}
+${sp(24)}<kubun_CD>1</kubun_CD>
+${sp(32)}
+${sp(24)}<kubun_NM>男</kubun_NM>
+${sp(24)}
+${sp(16)}</SEIBETSU>
+${sp(24)}
+${sp(16)}<BIRTHDAY ID="BIRTHDAY">
+${sp(32)}
+${sp(24)}<gen:era>${d.birth_era}</gen:era>
+${sp(32)}
+${sp(24)}<gen:yy>${d.birth_yy}</gen:yy>
+${sp(32)}
+${sp(24)}<gen:mm>${d.birth_mm||1}</gen:mm>
+${sp(32)}
+${sp(24)}<gen:dd>${d.birth_dd||1}</gen:dd>
+${sp(24)}
+${sp(16)}</BIRTHDAY>
+${sp(24)}
+${sp(16)}<SETAINUSHI_NM ID="SETAINUSHI_NM">${d.nm}</SETAINUSHI_NM>
+${sp(24)}
+${sp(16)}<SETAINUSHI_ZOKU ID="SETAINUSHI_ZOKU">本人</SETAINUSHI_ZOKU>
+${sp(24)}
+${sp(16)}<SHOKUGYO ID="SHOKUGYO">${etaxNormalize(d.shokugyo)}</SHOKUGYO>
+${sp(24)}
+${sp(16)}<TETSUZUKI ID="TETSUZUKI">
+${sp(32)}
+${sp(24)}<procedure_CD>RKO0010</procedure_CD>
+${sp(32)}
+${sp(24)}<procedure_NM>所得税及び復興特別所得税申告</procedure_NM>
+${sp(24)}
+${sp(16)}</TETSUZUKI>
+${sp(24)}
+${sp(16)}<NENBUN ID="NENBUN">
+${sp(32)}
+${sp(24)}<gen:era>5</gen:era>
+${sp(32)}
+${sp(24)}<gen:yy>${d.yy}</gen:yy>
+${sp(24)}
+${sp(16)}</NENBUN>
+${sp(24)}
+${sp(16)}<SHINKOKU_KBN ID="SHINKOKU_KBN">
+${sp(32)}
+${sp(24)}<kubun_CD>1</kubun_CD>
+${sp(24)}
+${sp(16)}</SHINKOKU_KBN>
+${sp(16)}
+${sp(12)}</IT>
+${sp(16)}
+${sp(12)}<KOA020 VR="23.0" id="KOA020-1" page="1" sakuseiDay="${today}" sakuseiNM="${d.nm}" softNM="シロクロ帳">
+${sp(24)}
+${sp(16)}<KOA020-1 page="1">
+${sp(32)}
+${sp(24)}<ABA00000>
+${sp(40)}
+${sp(32)}<ABA00010 IDREF="NENBUN"/>
+${sp(40)}
+${sp(32)}<ABA00020 IDREF="SHINKOKU_KBN"/>
+${sp(40)}
+${sp(32)}<ABA00030 IDREF="ZEIMUSHO"/>
+${sp(40)}
+${sp(32)}<ABA00040 IDREF="TEISYUTSU_DAY"/>
+${sp(40)}
+${sp(32)}<ABA00050>
+${sp(48)}
+${sp(40)}<ABA00060>
+${sp(44)}
+${sp(40)}<ABA00080 IDREF="NOZEISHA_ZIP"/>
+${sp(44)}
+${sp(40)}<ABA00090 IDREF="NOZEISHA_ADR"/>
+${sp(44)}
+${sp(40)}</ABA00060>
+${sp(48)}
+${sp(40)}<ABA00100>
+${sp(44)}
+${sp(40)}<ABA00110>
+${sp(48)}
+${sp(44)}<gen:era>5</gen:era>
+${sp(48)}
+${sp(44)}<gen:yy>${d.teisyutsu_yy}</gen:yy>
+${sp(44)}
+${sp(40)}</ABA00110>
+${sp(44)}
+${sp(40)}<ABA00120 IDREF="ICHIGATSUIPPI_ADR"/>
+${sp(44)}
+${sp(40)}</ABA00100>
+${sp(48)}
+${sp(40)}<ABA00125 IDREF="NOZEISHA_BANGO"/>
+${sp(48)}
+${sp(40)}<ABA00130 IDREF="NOZEISHA_NM_KN"/>
+${sp(48)}
+${sp(40)}<ABA00140 IDREF="NOZEISHA_NM"/>
+${sp(48)}
+${sp(40)}<ABA00160 IDREF="SHOKUGYO"/>
+${sp(48)}
+${sp(40)}<ABA00170 IDREF="NOZEISHA_YAGO"/>
+${sp(48)}
+${sp(40)}<ABA00180 IDREF="SETAINUSHI_NM"/>
+${sp(48)}
+${sp(40)}<ABA00190 IDREF="SETAINUSHI_ZOKU"/>
+${sp(48)}
+${sp(40)}<ABA00200 IDREF="BIRTHDAY"/>
+${sp(48)}
+${sp(40)}<ABA00220 IDREF="NOZEISHA_TEL"/>
+${sp(48)}
+${sp(40)}<ABA00225>
+${sp(44)}
+${sp(40)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00225>
+${sp(48)}
+${sp(40)}<ABA00230>
+${sp(44)}
+${sp(40)}<ABA00240>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00240>
+${sp(44)}
+${sp(40)}<ABA00250>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00250>
+${sp(44)}
+${sp(40)}<ABA00252>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00252>
+${sp(44)}
+${sp(40)}<ABA00253>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00253>
+${sp(44)}
+${sp(40)}<ABA00256>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00256>
+${sp(44)}
+${sp(40)}</ABA00230>
+${sp(48)}
+${sp(40)}<ABA00260>
+${sp(44)}
+${sp(40)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABA00260>
+${sp(40)}
+${sp(32)}</ABA00050>
+${sp(36)}
+${sp(24)}</ABA00000>
+${sp(32)}
+${sp(24)}<ABB00000>
+${sp(40)}
+${sp(32)}<ABB00010>
+${sp(48)}
+${sp(40)}<ABB00020>
+${sp(44)}
+${sp(40)}<ABB00025>2</ABB00025>
+${sp(44)}
+${sp(40)}<ABB00030>${d.income}</ABB00030>
+${sp(44)}
+${sp(40)}</ABB00020>
+${sp(48)}
+${sp(40)}<ABB00046>2</ABB00046>
+${sp(48)}
+${sp(40)}<ABB00090/>
+${sp(48)}
+${sp(40)}<ABB00120/>
+${sp(40)}
+${sp(32)}</ABB00010>
+${sp(40)}
+${sp(32)}<ABB00270>
+${sp(48)}
+${sp(40)}<ABB00280>
+${sp(44)}
+${sp(40)}<ABB00300>${d.profit}</ABB00300>
+${sp(44)}
+${sp(40)}</ABB00280>
+${sp(48)}
+${sp(40)}<ABB01050>
+${sp(44)}
+${sp(40)}<ABB01070/>
+${sp(44)}
+${sp(40)}<ABB01100/>
+${sp(44)}
+${sp(40)}</ABB01050>
+${sp(48)}
+${sp(40)}<ABB00410>${d.profit}</ABB00410>
+${sp(40)}
+${sp(32)}</ABB00270>
+${sp(40)}
+${sp(32)}<ABB00420>
+${sp(48)}
+${sp(40)}<ABB00542>${d.blueDeduct}</ABB00542>
+${sp(48)}
+${sp(40)}<ABB00550>${d.social + d.otherDeduct + 480000}</ABB00550>
+${sp(48)}
+${sp(40)}<ABB00555>${d.social + d.otherDeduct + 480000}</ABB00555>
+${sp(48)}
+${sp(40)}<ABB00560>${d.social + d.otherDeduct + 480000}</ABB00560>
+${sp(40)}
+${sp(32)}</ABB00420>
+${sp(40)}
+${sp(32)}<ABB00570>
+${sp(48)}
+${sp(40)}<ABB00610/>
+${sp(48)}
+${sp(40)}<ABB00740/>
+${sp(40)}
+${sp(32)}</ABB00570>
+${sp(40)}
+${sp(32)}<ABB00763/>
+${sp(40)}
+${sp(32)}<ABB00770>
+${sp(48)}
+${sp(40)}<ABB00850/>
+${sp(40)}
+${sp(32)}</ABB00770>
+${sp(40)}
+${sp(32)}<ABB00880/>
+${sp(32)}
+${sp(24)}</ABB00000>
+${sp(32)}
+${sp(24)}<ABZ00000>
+${sp(40)}
+${sp(32)}<kubun_CD>2</kubun_CD>
+${sp(32)}
+${sp(24)}</ABZ00000>
+${sp(32)}
+${sp(24)}<ABZ40000>
+${sp(40)}
+${sp(32)}<kubun_CD>2</kubun_CD>
+${sp(32)}
+${sp(24)}</ABZ40000>
+${sp(24)}
+${sp(16)}</KOA020-1>
+${sp(24)}
+${sp(16)}<KOA020-2 page="1">
+${sp(32)}
+${sp(24)}<ABC00000>
+${sp(40)}
+${sp(32)}<ABC00010 IDREF="NENBUN"/>
+${sp(40)}
+${sp(32)}<ABC00015 IDREF="SHINKOKU_KBN"/>
+${sp(40)}
+${sp(32)}<ABC00020>
+${sp(48)}
+${sp(40)}<ABC00040 IDREF="NOZEISHA_ADR"/>
+${sp(48)}
+${sp(40)}<ABC00050 IDREF="NOZEISHA_YAGO"/>
+${sp(48)}
+${sp(40)}<ABC00060 IDREF="NOZEISHA_NM_KN"/>
+${sp(48)}
+${sp(40)}<ABC00070 IDREF="NOZEISHA_NM"/>
+${sp(40)}
+${sp(32)}</ABC00020>
+${sp(32)}
+${sp(24)}</ABC00000>
+${sp(32)}
+${sp(24)}<ABD00000/>
+${sp(32)}
+${sp(24)}<ABE00000/>
+${sp(32)}
+${sp(24)}<ABH00000>
+${sp(40)}
+${sp(32)}<ABH00110/>
+${sp(40)}
+${sp(32)}<ABH00210/>
+${sp(40)}
+${sp(32)}<ABH00240/>
+${sp(40)}
+${sp(32)}<ABH00270/>
+${sp(40)}
+${sp(32)}<ABH00320>
+${sp(48)}
+${sp(40)}<ABH00365>
+${sp(44)}
+${sp(40)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABH00365>
+${sp(48)}
+${sp(40)}<ABH00370>
+${sp(44)}
+${sp(40)}<ABH00380>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABH00380>
+${sp(44)}
+${sp(40)}<ABH00600>
+${sp(48)}
+${sp(44)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABH00600>
+${sp(44)}
+${sp(40)}</ABH00370>
+${sp(48)}
+${sp(40)}<ABH00610>
+${sp(44)}
+${sp(40)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABH00610>
+${sp(48)}
+${sp(40)}<ABH00620>
+${sp(44)}
+${sp(40)}<kubun_CD>2</kubun_CD>
+${sp(44)}
+${sp(40)}</ABH00620>
+${sp(40)}
+${sp(32)}</ABH00320>
+${sp(32)}
+${sp(24)}</ABH00000>
+${sp(32)}
+${sp(24)}<ABY00000/>
+${sp(32)}
+${sp(24)}<ABI00000>
+${sp(40)}
+${sp(32)}<ABI00045>
+${sp(48)}
+${sp(40)}<kubun_CD>2</kubun_CD>
+${sp(40)}
+${sp(32)}</ABI00045>
+${sp(40)}
+${sp(32)}<ABI00080>
+${sp(48)}
+${sp(40)}<ABI00230/>
+${sp(48)}
+${sp(40)}<ABI00260/>
+${sp(40)}
+${sp(32)}</ABI00080>
+${sp(40)}
+${sp(32)}<ABI00110/>
+${sp(32)}
+${sp(24)}</ABI00000>
+${sp(24)}
+${sp(16)}</KOA020-2>
+${sp(24)}
+${sp(16)}<KOA020-3 page="1">
+${sp(32)}
+${sp(24)}<ABK00000>
+${sp(40)}
+${sp(32)}<ABK00010 IDREF="NENBUN"/>
+${sp(40)}
+${sp(32)}<ABK00020 IDREF="SHINKOKU_KBN"/>
+${sp(40)}
+${sp(32)}<ABK00030>
+${sp(48)}
+${sp(40)}<ABK00040>
+${sp(44)}
+${sp(40)}<ABK00060 IDREF="NOZEISHA_ADR"/>
+${sp(44)}
+${sp(40)}</ABK00040>
+${sp(48)}
+${sp(40)}<ABK00066 IDREF="NOZEISHA_YAGO"/>
+${sp(48)}
+${sp(40)}<ABK00070 IDREF="NOZEISHA_NM_KN"/>
+${sp(48)}
+${sp(40)}<ABK00080 IDREF="NOZEISHA_NM"/>
+${sp(40)}
+${sp(32)}</ABK00030>
+${sp(32)}
+${sp(24)}</ABK00000>
+${sp(32)}
+${sp(24)}<ABL00000>
+${sp(40)}
+${sp(32)}<ABL00010>
+${sp(48)}
+${sp(40)}<ABL00020>
+${sp(44)}
+${sp(40)}<ABL00030/>
+${sp(44)}
+${sp(40)}<ABL00060/>
+${sp(44)}
+${sp(40)}<ABL00100/>
+${sp(44)}
+${sp(40)}<ABL00134/>
+${sp(44)}
+${sp(40)}<ABL00140/>
+${sp(44)}
+${sp(40)}</ABL00020>
+${sp(40)}
+${sp(32)}</ABL00010>
+${sp(40)}
+${sp(32)}<ABL00190>
+${sp(48)}
+${sp(40)}<ABL00200>
+${sp(44)}
+${sp(40)}<ABL00210/>
+${sp(44)}
+${sp(40)}<ABL00240/>
+${sp(44)}
+${sp(40)}<ABL00280/>
+${sp(44)}
+${sp(40)}<ABL00320/>
+${sp(44)}
+${sp(40)}<ABL00330/>
+${sp(44)}
+${sp(40)}</ABL00200>
+${sp(40)}
+${sp(32)}</ABL00190>
+${sp(40)}
+${sp(32)}<ABL00430>
+${sp(48)}
+${sp(40)}<ABL00440>${d.profit}</ABL00440>
+${sp(48)}
+${sp(40)}<ABL00450>${d.blueDeduct + d.social + d.otherDeduct + 480000}</ABL00450>
+${sp(48)}
+${sp(40)}<ABL00460>${d.blueDeduct}</ABL00460>
+${sp(48)}
+${sp(40)}${d.taxable > 0 ? '<ABL00540>' + d.taxable + '</ABL00540>' : '<ABL00540/>'}
+${sp(40)}
+${sp(32)}</ABL00430>
+${sp(40)}
+${sp(32)}<ABL00900>
+${sp(48)}
+${sp(40)}${d.tax > 0 ? '<ABL00910>' + d.tax + '</ABL00910>' : '<ABL00910/>'}
+${sp(48)}
+${sp(40)}<ABL00934/>
+${sp(48)}
+${sp(40)}<ABL00940/>
+${sp(40)}
+${sp(32)}</ABL00900>
+${sp(40)}
+${sp(32)}<ABL00640/>
+${sp(40)}
+${sp(32)}<ABL00870>
+${sp(48)}
+${sp(40)}<ABL01050/>
+${sp(40)}
+${sp(32)}</ABL00870>
+${sp(32)}
+${sp(24)}</ABL00000>
+${sp(24)}
+${sp(16)}</KOA020-3>
+${sp(16)}
+${sp(12)}</KOA020>
+${sp(16)}
+${sp(12)}<KOA100 VR="23.0" id="KOA100-1" page="1" sakuseiDay="${today}" sakuseiNM="${d.nm}" softNM="シロクロ帳">
+${sp(24)}
+${sp(16)}<KOA100-1 page="1">
+${sp(32)}
+${sp(24)}<AAA00000 IDREF="NENBUN"/>
+${sp(32)}
+${sp(24)}<AAB00000>
+${sp(40)}
+${sp(32)}<AAB00010>${etaxNormalize(d.adr)}</AAB00010>
+${sp(40)}
+${sp(32)}<AAB00020>
+${sp(48)}
+${sp(40)}<AAB00030 IDREF="NOZEISHA_NM_KN"/>
+${sp(48)}
+${sp(40)}<AAB00040 IDREF="NOZEISHA_NM"/>
+${sp(40)}
+${sp(32)}</AAB00020>
+${sp(40)}
+${sp(32)}<AAB00050>同上</AAB00050>
+${sp(40)}
+${sp(32)}<AAB00060>
+${sp(48)}
+${sp(40)}<AAB00070>
+${sp(44)}
+${sp(40)}<gen:tel1>${d.tel1}</gen:tel1>
+${sp(44)}
+${sp(40)}<gen:tel2>${d.tel2}</gen:tel2>
+${sp(44)}
+${sp(40)}<gen:tel3>${d.tel3}</gen:tel3>
+${sp(44)}
+${sp(40)}</AAB00070>
+${sp(40)}
+${sp(32)}</AAB00060>
+${sp(40)}
+${sp(32)}<AAB00090 IDREF="SHOKUGYO"/>
+${sp(32)}
+${sp(24)}</AAB00000>
+${sp(32)}
+${sp(24)}<AAE00000 IDREF="TEISYUTSU_DAY"/>
+${sp(32)}
+${sp(24)}<AAR00000>
+${sp(40)}
+${sp(32)}<kubun_CD>1</kubun_CD>
+${sp(32)}
+${sp(24)}</AAR00000>
+${sp(32)}
+${sp(24)}<AAF00000>
+${sp(40)}
+${sp(32)}<AAF00010>
+${sp(48)}
+${sp(40)}<gen:mm>1</gen:mm>
+${sp(48)}
+${sp(40)}<gen:dd>1</gen:dd>
+${sp(40)}
+${sp(32)}</AAF00010>
+${sp(40)}
+${sp(32)}<AAF00020>
+${sp(48)}
+${sp(40)}<gen:mm>12</gen:mm>
+${sp(48)}
+${sp(40)}<gen:dd>31</gen:dd>
+${sp(40)}
+${sp(32)}</AAF00020>
+${sp(32)}
+${sp(24)}</AAF00000>
+${sp(32)}
+${sp(24)}<AAG00000>
+${sp(40)}
+${sp(32)}<AAG00010>${d.income}</AAG00010>
+${sp(40)}
+${sp(32)}<AAG00020>${d.cats['仕入高']||0}</AAG00020>
+${sp(40)}
+${sp(32)}<AAG00040>${d.cats['仕入高']||0}</AAG00040>
+${sp(40)}
+${sp(32)}<AAG00050>${grossProfit}</AAG00050>
+${sp(40)}
+${sp(32)}<AAG00060>${d.cats['租税公課']||0}</AAG00060>
+${sp(40)}
+${sp(32)}<AAG00070>${d.cats['荷造運賃']||0}</AAG00070>
+${sp(40)}
+${sp(32)}<AAG00080>0</AAG00080>
+${sp(40)}
+${sp(32)}<AAG00090>${d.cats['旅費交通費']||0}</AAG00090>
+${sp(40)}
+${sp(32)}<AAG00100>${d.cats['通信費']||0}</AAG00100>
+${sp(40)}
+${sp(32)}<AAG00110>0</AAG00110>
+${sp(40)}
+${sp(32)}<AAG00120>${d.cats['接待交際費']||0}</AAG00120>
+${sp(40)}
+${sp(32)}<AAG00130>${d.cats['保険料']||0}</AAG00130>
+${sp(40)}
+${sp(32)}<AAG00140>${d.cats['車両費']||0}</AAG00140>
+${sp(40)}
+${sp(32)}<AAG00150>${d.cats['消耗品費']||0}</AAG00150>
+${sp(40)}
+${sp(32)}<AAG00160>${d.deprTotal}</AAG00160>
+${sp(40)}
+${sp(32)}<AAG00170>${d.cats['外注工賃']||0}</AAG00170>
+${sp(40)}
+${sp(32)}<AAG00180>0</AAG00180>
+${sp(40)}
+${sp(32)}<AAG00190>${d.cats['地代家賃']||0}</AAG00190>
+${sp(40)}
+${sp(32)}<AAG00200>0</AAG00200>
+${sp(40)}
+${sp(32)}<AAG00215>${d.cats['燃料費']||0}</AAG00215>
+${sp(40)}
+${sp(32)}<AAG00230>${d.cats['雑費']||0}</AAG00230>
+${sp(40)}
+${sp(32)}<AAG00240>${expTotal}</AAG00240>
+${sp(40)}
+${sp(32)}<AAG00250>${d.profit}</AAG00250>
+${sp(40)}
+${sp(32)}<AAG00260>0</AAG00260>
+${sp(40)}
+${sp(32)}<AAG00270>${d.profit}</AAG00270>
+${sp(32)}
+${sp(24)}</AAG00000>
+${sp(32)}
+${sp(24)}<AAH00000/>
+${sp(24)}
+${sp(16)}</KOA100-1>
+${sp(24)}
+${sp(16)}<KOA100-2 page="1">
+${sp(32)}
+${sp(24)}<AAK00000>
+${monthTags}
+${sp(24)}<AAK00130>${d.income}</AAK00130>
+${sp(24)}</AAK00000>
+${sp(32)}
+${sp(24)}<AAL00000/>
+${sp(32)}
+${sp(24)}<AAP00000>${assetTags}
+${sp(32)}
+${sp(24)}<AAP00170>${d.deprTotal}</AAP00170>
+${sp(24)}
+${sp(16)}</AAP00000>
+${sp(24)}
+${sp(16)}</KOA100-2>
+${sp(24)}
+${sp(16)}<KOA100-3 page="1">
+${sp(32)}
+${sp(24)}<AAS00000/>
+${sp(32)}
+${sp(24)}<AAT00000>
+${sp(32)}
+${sp(24)}</AAT00000>
+${sp(24)}
+${sp(16)}</KOA100-3>
+${sp(16)}
+${sp(12)}</KOA100>
+${sp(12)}
+${sp(8)}</CONTENTS>
+${sp(8)}
+${sp(4)}</RKO0010>
+${sp(4)}
 </DATA>`;
 }
-
 
 function updateHeader(){
   const income=entries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
